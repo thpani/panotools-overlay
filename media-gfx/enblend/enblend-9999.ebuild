@@ -8,7 +8,7 @@ ECVS_SERVER="enblend.cvs.sourceforge.net:/cvsroot/enblend"
 ECVS_MODULE="enblend"
 
 DESCRIPTION="Image Blending with Multiresolution Splines"
-HOMEPAGE="http://enblend.sf.net/"
+HOMEPAGE="http://enblend.sourceforge.net/"
 SRC_URI=""
 
 LICENSE="GPL-2 VIGRA"
@@ -16,13 +16,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
-DEPEND="media-libs/tiff
+DEPEND=">=dev-libs/boost-1.31.0
 	media-libs/lcms
-	virtual/glut
 	media-libs/glew
 	media-libs/plotutils
-	>=dev-libs/boost-1.31.0"
-RDEPEND="${DEPEND}"
+	media-libs/tiff
+	virtual/glut"
 
 S="${WORKDIR}/${PN}"
 
@@ -36,15 +35,21 @@ pkg_setup() {
 	fi
 
 	ewarn
-	ewarn "The compilation of enblend needs a lot of RAM. If you have less"
-	ewarn "than 1GB RAM (and swap) you probably won't be able to compile it."
+	ewarn "Please note: the compilation of enblend needs about 1 GB RAM (and swap)."
 	ewarn
+}
+
+src_unpack() {
+	cvs_src_unpack
+	cd "${S}"
 }
 
 src_compile() {
 	emake -f Makefile.cvs || die "emake -f Makefile.cvs failed"
+	sed -i -e 's:-O3::' configure || die
 	econf
-	emake || die "Make failed"
+	# forcing -j1 as every parallel compilation process needs about 1 GB RAM.
+	emake -j1 || die
 }
 
 src_install() {
