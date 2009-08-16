@@ -1,11 +1,12 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils cvs
+EAPI="2"
 
-ECVS_SERVER="enblend.cvs.sourceforge.net:/cvsroot/enblend"
-ECVS_MODULE="enblend"
+inherit eutils mercurial
+
+EHG_REPO_URI="http://enblend.hg.sourceforge.net:8000/hgroot/enblend"
 
 DESCRIPTION="Image Blending with Multiresolution Splines"
 HOMEPAGE="http://enblend.sourceforge.net/"
@@ -19,35 +20,20 @@ IUSE=""
 DEPEND=">=dev-libs/boost-1.31.0
 	media-libs/lcms
 	media-libs/glew
-	media-libs/plotutils
+	media-libs/plotutils[X]
 	media-libs/tiff
 	virtual/glut"
+RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${PN}"
 
-pkg_setup() {
-	# bug 202476
-	if ! built_with_use media-libs/plotutils X ; then
-		eerror
-		eerror "media-gfx/plotutils has to be built with USE=\"X\""
-		eerror
-		die "emerge plotutils with USE=\"X\""
-	fi
-
-	ewarn
-	ewarn "Please note: the compilation of enblend needs about 1 GB RAM (and swap)."
-	ewarn
-}
-
-src_unpack() {
-	cvs_src_unpack
-	cd "${S}"
+src_configure() {
+	emake -f Makefile.cvs || die "emake -f Makefile.cvs failed"
+	sed -i -e 's/-O3//' configure || die
+	econf
 }
 
 src_compile() {
-	emake -f Makefile.cvs || die "emake -f Makefile.cvs failed"
-	sed -i -e 's:-O3::' configure || die
-	econf
 	# forcing -j1 as every parallel compilation process needs about 1 GB RAM.
 	emake -j1 || die
 }
