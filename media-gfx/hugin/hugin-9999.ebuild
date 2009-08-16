@@ -22,7 +22,7 @@ IUSE="lapack +sift $(echo ${LANGS//\ /\ linguas_})"
 
 DEPEND="app-arch/zip
 	>=dev-libs/boost-1.35.0-r5
-	>=media-gfx/enblend-3.0_p20080807
+	|| ( >=media-gfx/enblend-3.0_p20080807 =media-gfx/enblend-staging-9999 )
 	media-gfx/exiv2
 	media-libs/jpeg
 	>=media-libs/libpano13-2.9.14
