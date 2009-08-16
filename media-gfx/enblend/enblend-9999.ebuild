@@ -17,7 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
 
-DEPEND=">=dev-libs/boost-1.31.0
+DEPEND="!media-libs/enblend-staging
+	>=dev-libs/boost-1.31.0
 	media-libs/lcms
 	media-libs/glew
 	media-libs/plotutils[X]
