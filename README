@@ -1,0 +1,24 @@
+README
+======
+
+# I'm not able to maintain this repository at this time (rarely using Gentoo right now). Anyone interested is encouraged to fork!
+
+A Gentoo overlay for Panorama Tools.
+
+For more information, refer to
+[PanoTools Wiki :: Gentoo](http://wiki.panotools.org/Hugin_Compiling_Gentoo).
+
+Setting up layman
+-----------------
+
+Edit `/etc/layman/layman.cfg`:
+
+    overlays  : http://www.gentoo.org/proj/en/overlays/layman-global.txt
+                http://thpani.at/media/downloads/overlays.xml
+
+and add the overlay using layman:
+
+    $ layman -f
+    $ layman -a panotools
+
+Run `layman -S` periodicaly for new updates.
